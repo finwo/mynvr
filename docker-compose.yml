@@ -24,3 +24,6 @@ services:
       - 4000:4000
     environment:
       - PORT=4000
+      - STORAGE_DIR=/data
+    volumes:
+      - ./data:/data

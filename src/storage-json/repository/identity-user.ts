@@ -55,4 +55,8 @@ export class IdentityUserJsonRepository extends UserRepository {
     return true;
   }
 
+  async findAll(): Promise<User[]> {
+    return this.getContents();
+  }
+
 }
