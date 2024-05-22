@@ -1,5 +1,5 @@
 import { Service } from '@finwo/di';
-import { User    } from '../model/user';
+import { User    } from '@identity/model/user';
 
 @Service()
 export abstract class UserRepository {

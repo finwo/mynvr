@@ -13,7 +13,10 @@
   "dependencies": {
     "@finwo/di": "^1.1.8",
     "@finwo/router": "^0.5.0",
+    "@finwo/router-fastify": "^0.5.0",
     "ajv": "^8.13.0",
+    "fastify": "4.15.*",
+    "module-alias": "^2.2.2",
     "reflect-metadata": "^0.1.14",
     "typescript": "^4.9.5",
     "uuid": "^9.0.1"
@@ -22,5 +25,9 @@
     "@types/node": "^20.12.12",
     "@types/uuid": "^9.0.8",
     "json-schema-to-ts": "^3.1.0"
+  },
+  "_moduleAliases": {
+    "@identity": "dist/identity",
+    "@storage-json": "dist/storage-json"
   }
 }

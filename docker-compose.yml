@@ -12,8 +12,14 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
 
+  mediamtx:
+    image: bluenviron/mediamtx
+    volumes:
+      - ./docker/mediamtx/config.yml:/mediamtx.yml
+      - ./data:/data
+
   agent:
-    build: component/agent
+    build: .
     ports:
       - 4000:4000
     environment:

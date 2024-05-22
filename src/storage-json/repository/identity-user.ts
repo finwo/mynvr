@@ -1,7 +1,7 @@
 import { Service        } from '@finwo/di';
 import { v4 as uuidv4   } from 'uuid';
-import { UserRepository } from '../../identity/repository/user';
-import { User, isUser   } from '../../identity/model/user';
+import { UserRepository } from '@identity/repository/user';
+import { User, isUser   } from '@identity/model/user';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 
 const storageFile = (process.env.STORAGE_DIR || '/data') + '/users.json';

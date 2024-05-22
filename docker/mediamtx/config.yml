@@ -1,0 +1,3 @@
+api: true
+authMethod: http
+externalAuthenticationURL: http://agent:4000/api/v1/identity/auth/mediamtx

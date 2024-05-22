@@ -1,7 +1,7 @@
 import { Service                  } from '@finwo/di';
 import { v4 as uuidv4             } from 'uuid';
-import { CredentialRepository     } from '../../identity/repository/credential';
-import { Credential, isCredential } from '../../identity/model/credential';
+import { CredentialRepository     } from '@identity/repository/credential';
+import { Credential, isCredential } from '@identity/model/credential';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 
 const storageFile = (process.env.STORAGE_DIR || '/data') + '/credentials.json';

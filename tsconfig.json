@@ -22,6 +22,10 @@
       "reflect-metadata",
       "node"
     ],
+    "paths": {
+      "@identity/*": ["./src/identity/*"],
+      "@storage-json/*": ["./src/storage-json/*"],
+    }
   },
   "include": ["src/**/*"]
 }

@@ -1,6 +1,6 @@
 import { Service    } from '@finwo/di';
-import { Credential } from '../model/credential';
-import { User       } from '../model/user';
+import { Credential } from '@identity/model/credential';
+import { User       } from '@identity/model/user';
 
 @Service()
 export abstract class CredentialRepository {
