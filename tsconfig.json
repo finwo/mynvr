@@ -25,6 +25,7 @@
     "paths": {
       "@identity/*": ["./src/identity/*"],
       "@storage-json/*": ["./src/storage-json/*"],
+      "@webgui/*": ["./src/webgui/*"],
     }
   },
   "include": ["src/**/*"]

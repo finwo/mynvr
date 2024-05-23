@@ -16,6 +16,7 @@
     "@finwo/router-fastify": "^0.5.0",
     "ajv": "^8.13.0",
     "fastify": "4.15.*",
+    "htmx.org": "^1.9.12",
     "module-alias": "^2.2.2",
     "pbkdf2": "^3.1.2",
     "reflect-metadata": "^0.1.14",
@@ -30,6 +31,7 @@
   },
   "_moduleAliases": {
     "@identity": "dist/identity",
-    "@storage-json": "dist/storage-json"
+    "@storage-json": "dist/storage-json",
+    "@webgui": "dist/webgui"
   }
 }

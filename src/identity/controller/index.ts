@@ -1,7 +1,7 @@
-import AuthControllers from './auth';
-import UserControllers from './user';
+import authControllers from './auth';
+import userControllers from './user';
 
-export const Controllers = [
-  ...AuthControllers,
-  ...UserControllers,
+export const controllers = [
+  ...authControllers,
+  ...userControllers,
 ];

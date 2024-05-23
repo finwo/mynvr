@@ -16,7 +16,10 @@ export class IdentityAuthMediamtxController {
   ) {
 
     // Sanity check
-    if (!isInput(req.body)) { res.statusCode = 401; return; };
+    if (!isInput(req.body)) {
+      res.statusCode = 401;
+      return;
+    };
 
     // Actual permission check
     const response = await this.query.execute(req.body);

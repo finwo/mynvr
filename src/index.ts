@@ -9,12 +9,19 @@ const app = Fastify({
   ignoreDuplicateSlashes: true,
 });
 
-import { Controllers as IdentityControllers } from './identity';
+import { controllers as identityControllers } from './identity';
+import { controllers as webguiControllers   } from './webgui';
 
-// Register your routes
+// Register routes
 app.register(plugin, [
-  ...IdentityControllers,
+  ...identityControllers,
+  ...webguiControllers,
 ]);
+
+// Basic web entry
+app.get('/', (request,reply) => {
+  reply.redirect('/ui/');
+});
 
 // Setup persistent storage
 let storageClass = process.env.STORAGE_CLASS || 'json-file';
