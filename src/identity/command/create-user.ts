@@ -4,7 +4,8 @@ import { FromSchema } from 'json-schema-to-ts';
 import { pbkdf2Sync } from 'pbkdf2';
 import { CredentialRepository } from '@identity/repository/credential';
 import { UserRepository       } from '@identity/repository/user';
-import { Credential, User     } from '@identity/model';
+import { Credential           } from '@identity/model/credential';
+import { User, isUser         } from '@identity/model/user';
 
 const ajv = new Ajv();
 
@@ -49,9 +50,9 @@ export class CreateUserCommand {
     if (found) return Output.Conflict;
 
     // Create the user
-    const user: User = { username: input.user };
+    const user: Partial<User> = { username: input.user };
     await this.userRepository.save(user);
-    if (!user.id) return Output.InternalError;
+    if (!isUser(user)) return Output.InternalError;
 
     // TODO: let this make use of the make-credential command
     const credential: Credential = {

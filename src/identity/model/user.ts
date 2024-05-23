@@ -14,6 +14,7 @@ export const userSchema = {
     },
   },
   required: [
+    'id',
     'username',
   ],
 } as const;

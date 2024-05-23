@@ -15,7 +15,7 @@ export class CreateUserController {
     @Res() res: FastifyReply
   ) {
     const response = await this.command.execute(req.body as CommandInput);
-    console.log({ input: req.body, output: response });
+    return response;
   }
 
 }

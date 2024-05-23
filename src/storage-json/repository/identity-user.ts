@@ -1,7 +1,7 @@
-import { Service        } from '@finwo/di';
-import { v4 as uuidv4   } from 'uuid';
-import { UserRepository } from '@identity/repository/user';
-import { User, isUser   } from '@identity/model/user';
+import { Service                     } from '@finwo/di';
+import { v4 as uuidv4                } from 'uuid';
+import { UserRepository, FindOptions } from '@identity/repository/user';
+import { User, isUser                } from '@identity/model/user';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 
 const storageFile = (process.env.STORAGE_DIR || '/data') + '/users.json';
@@ -10,7 +10,11 @@ const storageFile = (process.env.STORAGE_DIR || '/data') + '/users.json';
 export class IdentityUserJsonRepository extends UserRepository {
 
   private getContents(): User[] {
-    return JSON.parse(existsSync(storageFile) ? readFileSync(storageFile).toString() : '[]');
+    try {
+      return JSON.parse(existsSync(storageFile) ? readFileSync(storageFile).toString() : '[]');
+    } catch {
+      return [];
+    }
   }
 
   private putContents(contents: User[]) {
@@ -44,8 +48,9 @@ export class IdentityUserJsonRepository extends UserRepository {
     return true;
   }
 
-  async save(user: User): Promise<boolean> {
+  async save(user: Partial<User>): Promise<boolean> {
     if (!user.id) user.id = uuidv4();
+    if (!isUser(user)) return false;
     const contents = this.getContents().filter(entry => {
       if (!isUser(entry)) return false;
       return entry.id !== user.id;
@@ -55,8 +60,15 @@ export class IdentityUserJsonRepository extends UserRepository {
     return true;
   }
 
-  async findAll(): Promise<User[]> {
-    return this.getContents();
+  async findAll(options?: FindOptions): Promise<User[]> {
+    const opts: FindOptions = Object.assign({}, options);
+    return this
+      .getContents()
+      .filter((entry, index) => {
+        if ('undefined' === typeof opts.limit) return true;
+        return index < opts.limit;
+      })
+      ;
   }
 
 }

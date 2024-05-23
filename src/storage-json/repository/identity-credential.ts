@@ -10,7 +10,11 @@ const storageFile = (process.env.STORAGE_DIR || '/data') + '/credentials.json';
 export class IdentityCredentialJsonRepository extends CredentialRepository {
 
   private getContents(): Credential[] {
-    return JSON.parse(existsSync(storageFile) ? readFileSync(storageFile).toString() : '[]');
+    try {
+      return JSON.parse(existsSync(storageFile) ? readFileSync(storageFile).toString() : '[]');
+    } catch {
+      return [];
+    }
   }
 
   private putContents(contents: Credential[]) {

@@ -1,8 +1,9 @@
 import { Service    } from '@finwo/di';
 import { Ajv        } from 'ajv';
 import { FromSchema } from 'json-schema-to-ts';
-import { CredentialRepository } from '@identity/repository/credential';
-import { UserRepository       } from '@identity/repository/user';
+import { CredentialRepository          } from '@identity/repository/credential';
+import { UserRepository                } from '@identity/repository/user';
+import { ValidateUsernamePasswordQuery } from '@identity/query/validate-username-password';
 
 const ajv = new Ajv();
 
@@ -54,26 +55,16 @@ export enum Output {
 @Service()
 export class AuthMediamtxQuery {
   constructor(
-    private credentialRepository: CredentialRepository,
-    private userRepository      : UserRepository
+    private credentialRepository         : CredentialRepository,
+    private userRepository               : UserRepository,
+    private validateUsernamePasswordQuery: ValidateUsernamePasswordQuery,
   ) {}
   async execute(input: Input): Promise<Output> {
     if (!isInput(input)) return Output.BadRequest;
     if (!(input.user && input.password)) return Output.AuthorizationRequired;
 
-    const user = await this.userRepository.getByUsername(input.user);
-    if (!user) return Output.PermissionDenied;
-    if (!user.id) return Output.PermissionDenied;
-
-    const credentials = await this.credentialRepository.findByUser(user.id);
-    if (!credentials.length) return Output.PermissionDenied;
-
-    // for(const credential of credentials) {
-    //   switch(credential.type) {
-    //     case 'password':
-    //     case
-    //   }
-    // }
+    const validateResponse = this.validateUsernamePasswordQuery.execute(input);
+    if (!validateResponse) return Output.PermissionDenied;
 
     return Output.Ok;
   }

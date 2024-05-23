@@ -7,5 +7,5 @@ export abstract class CredentialRepository {
   abstract findByUser(userId: string): Promise<Credential[]>;
   abstract getById(credentialId: string): Promise<Credential|undefined>;
   abstract deleteById(credentialId: string): Promise<boolean>;
-  abstract save(credential: Credential): Promise<boolean>;
+  abstract save(credential: Partial<Credential>): Promise<boolean>;
 };
