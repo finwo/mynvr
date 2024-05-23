@@ -1,9 +1,9 @@
-import { Controller, Get, Res    } from '@finwo/router';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { Controller, Get, Post, Res, Req } from '@finwo/router';
+import { FastifyRequest, FastifyReply   } from 'fastify';
 
 import loginPage from '@webgui/template/page/login';
 
-@Controller("/ui/")
+@Controller("/ui")
 export class AuthenticationController {
 
   @Get()
@@ -12,6 +12,14 @@ export class AuthenticationController {
   ) {
     res.header('Content-Type', 'text/html');
     res.send(loginPage());
+  }
+
+  @Post("/login")
+  async handleLogin(
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply
+  ) {
+    res.send(req.body);
   }
 
 }

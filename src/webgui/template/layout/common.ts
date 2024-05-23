@@ -10,6 +10,7 @@ export default function(title?: string, body?: string) {
     ${styling()}
   </head>
   <body>
+    <script src="/ui/assets/htmx.js"></script>
     ${body || ''}
   </body>
 </html>

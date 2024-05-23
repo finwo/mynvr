@@ -18,7 +18,7 @@ export class IdentityUserJsonRepository extends UserRepository {
   }
 
   private putContents(contents: User[]) {
-    writeFileSync(storageFile, JSON.stringify(contents));
+    writeFileSync(storageFile, JSON.stringify(contents, null, 2));
   }
 
   async getById(userId: string): Promise<User|undefined> {

@@ -9,6 +9,8 @@ const app = Fastify({
   ignoreDuplicateSlashes: true,
 });
 
+app.register(require('@fastify/formbody'));
+
 import { controllers as identityControllers } from './identity';
 import { controllers as webguiControllers   } from './webgui';
 

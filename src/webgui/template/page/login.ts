@@ -60,14 +60,14 @@ export default function() {
 
 </style>
 <div id=wrapper>
-  <form>
+  <form method="POST" action="/ui/login">
     <h2>Login</h2>
 
     <label for=username>Username</label>
-    <input id=username type=text>
+    <input id=username name=username type=text>
 
     <label for=password>Password</label>
-    <input id=password type=password>
+    <input id=password name=password type=password>
 
     <button type=submit>Login</button>
   </form>

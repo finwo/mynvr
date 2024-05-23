@@ -18,7 +18,7 @@ export class IdentityCredentialJsonRepository extends CredentialRepository {
   }
 
   private putContents(contents: Credential[]) {
-    writeFileSync(storageFile, JSON.stringify(contents));
+    writeFileSync(storageFile, JSON.stringify(contents, null, 2));
   }
 
   async getById(credentialId: string): Promise<Credential|undefined> {
