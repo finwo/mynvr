@@ -1,0 +1,152 @@
+import commonLayout from '../layout/common';
+
+export default function() {
+  return commonLayout('Cookie information', `
+<style>
+  body {
+    margin: 0 auto;
+    width: 60rem;
+    max-width: 100%;
+    padding: 2em;
+  }
+  h2 {
+    margin-top: 2rem;
+  }
+  p {
+    margin-top: 1em;
+  }
+</style>
+
+<div id=wrapper>
+  <a href="/">Home</a>
+
+  <h2>Use of cookies</h2>
+  <small>What are cookies and why we use them in MyNVR</small>
+
+  <p>
+    A cookie is a file that is downloaded to the user device when accessing
+    certain websites to store and retrieve information about browsing performed
+    on said devices.
+  </p>
+
+  <p>
+    Among other things, cookies enable the website to store and retrieve
+    information about the user’s decisions and habits. At MyNVR, we use them to
+    authenticate users on our website, allowing them to access privileged
+    sections and features of the website.
+  </p>
+
+  <!--
+  <p>
+    It is important to mention that using cookies does not provide personal data
+    on the user, who remains anonymous to MyNVR.
+  </p>
+  -->
+
+  <p>
+    Users may configure their browser to reject the use of cookies, in which
+    case they will not be able to access privileged sections and features of the
+    website.
+  </p>
+
+  <p>
+    You can learn more about what cookies are and how they work on Wikipedia
+    (<a href="https://en.wikipedia.org/wiki/HTTP_cookie">https://en.wikipedia.org/wiki/HTTP_cookie</a>).
+  </p>
+
+  <h2>What type of cookies does MyNVR use</h2>
+
+  <!--
+  <p>
+    MyNVR only uses first-party cookies, sessionStorage and localStorage when
+    there's a technical reason to do so, like logging in to the MyNVR website.
+  </p>
+  -->
+
+  <p>
+    Based on their duration, cookies can be divided in session cookies or
+    persistent cookies. The former expire when the user closes the browser. The
+    latter expire when the purpose for which they were created is fulfilled (for
+    example, for identification of users while visiting MyNVR website and
+    services) or when they are manually deleted.
+  </p>
+
+  <p>
+    Furthermore, based on their purpose, cookies may be classified as follows:
+
+    <ul>
+      <li>
+        <b>Technical cookies</b>:
+        These are first-party, temporary cookies that, in this particular case,
+        allow the browser to remember certain aspects, such as the language
+        selected when visiting the website, as well as see the cookie bar based
+        on whether the terms have been accepted or not.
+      </li>
+      <li>
+        <b>Personalization cookies</b>:
+        These are first-party, temporary cookies that are generated when users
+        register or log back in at a later time, and are used to identify what
+        pages you have visited and what services you have used with the
+        following aims:
+        <ul>
+          <li>
+            Keep users logged in so, if they close a service or page, the
+            browser or computer and access the service or page again at another
+            time or another day, they will remain logged in, thus making their
+            browsing easier without having to log in again. This functionality
+            can be deleted if the user clicks on “Log out,” therefore deleting
+            this cookie, and the next time he/she accesses the website, they
+            will have to log in to be identified.
+          </li>
+          <li>
+            Check whether users are authorized to access certain services like,
+            for instance, to modify camera behavior.
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </p>
+
+  <p>
+    <strong>
+      Important: Unless the user decides to log in on any MyNVR website, the
+      cookie will never be associated with any personal data that can identify
+      him/her. These cookies will only be used for technical purposes to help
+      optimize the user experience on the site.
+    </strong>
+  </p>
+
+
+  <h2>How to disable cookies in your browser</h2>
+
+  <p>
+    Currently, most browsers allow the user to configure whether they wish to
+    accept cookies or not, and which ones. These settings are usually under the
+    “Options” or “Preferences” menu in your browser.
+  </p>
+
+  <p>
+    The instructions to configure cookies in the main browsers are as follows:
+
+    <ul>
+      <li><b>Google Chrome</b>: Settings -> Advanced -> Privacy and security -> Content settings. For more information, you can visit Google’s support or the browser’s Help.</li>
+      <li><b>Mozilla Firefox</b>: Tools -> Options -> Privacy -> History -> Personalized settings. For more information, you can visit Mozilla’s support or the browser’s Help.</li>
+      <li><b>Internet Explorer</b>: Tools -> Internet options -> Privacy -> Settings. For more information, you can visit Microsoft’s support or the browser’s Help.</li>
+      <li><b>Apple Safari</b>: Preferences -> Security. For more information, you can visit Apple’s support or the browser’s Help.</li>
+    </ul>
+  </p>
+
+  <p>
+    If you decide to disable cookies, we won’t be able to offer you any of
+    MyNVR’s functionalities.
+  </p>
+
+  <h2>Updating cookies</h2>
+
+  <p>
+    MyNVR's cookies can be updated, so we advise you to check our policy periodically.
+  </p>
+
+</div>
+  `);
+};

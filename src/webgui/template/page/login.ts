@@ -38,15 +38,13 @@ export default function() {
     display: block;
     margin-top: 1em;
   }
+
   #wrapper > form > button {
-    background: #222;
-    color: #fff;
-    padding: 0.5em;
-    border: none;
     display: block;
     margin-top: 2em;
     width: 100%;
   }
+
   @media only screen and (max-width: 60rem) {
     #wrapper {
       background: #fff;

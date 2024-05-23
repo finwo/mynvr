@@ -19,6 +19,15 @@ export default function() {
       border: none;
       padding: 0.5em;
     }
+    button {
+      background: #222;
+      color: #fff;
+      padding: 0.5em;
+      border: none;
+    }
+    [onclick] {
+      cursor: pointer;
+    }
   </style>
 `;
 }
