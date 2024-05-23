@@ -6,6 +6,7 @@ export default function(title?: string, body?: string) {
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${title || 'foobar'}</title>
     ${styling()}
     <style>
@@ -45,11 +46,17 @@ export default function(title?: string, body?: string) {
       </div>
     </div>
     <script>
+      // Cookie consent only applies for 400 days here
+      if ((parseInt(localStorage.cookieConsent)||0) < (Date.now() - (1000 * 3600 * 24 * 400))) {
+        delete localStorage.cookieConsent;
+      }
+      // Handle already-accepted
       if ((parseInt(localStorage.cookieConsent)|0) || (document.location.pathname == "/ui/use-of-cookies")) {
         document.body.removeChild(cookiewrapper);
       }
+      // Accept action
       function acceptCookies() {
-        localStorage.cookieConsent = 1;
+        localStorage.cookieConsent = Date.now();
         document.body.removeChild(cookiewrapper);
       }
     </script>
