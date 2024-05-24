@@ -1,7 +1,8 @@
-import commonLayout from '../layout/common';
+{% extends "layout/common" %}
 
-export default function() {
-  return commonLayout('Login', `
+{% block title %}Login{% endblock %}
+
+{% block body %}
 <style>
   body {
     background-image   : url('/ui/assets/authentication.jpeg');
@@ -70,5 +71,4 @@ export default function() {
     <button type=submit>Login</button>
   </form>
 </div>
-  `);
-};
+{% endblock %}

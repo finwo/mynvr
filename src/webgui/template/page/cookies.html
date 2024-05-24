@@ -1,7 +1,8 @@
-import commonLayout from '../layout/common';
+{% extends "layout/common" %}
 
-export default function() {
-  return commonLayout('Cookie information', `
+{% block title %}Cookie information{% endblock %}
+
+{% block body %}
 <style>
   body {
     margin: 0 auto;
@@ -148,5 +149,4 @@ export default function() {
   </p>
 
 </div>
-  `);
-};
+{% endblock %}
