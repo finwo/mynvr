@@ -5,7 +5,7 @@
 {% block body %}
 <style>
   body {
-    background-image   : url('/ui/assets/authentication.jpeg');
+    background-image   : linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('/ui/assets/authentication.jpeg');
     background-size    : cover;
     background-position: center;
   }
@@ -28,10 +28,18 @@
     padding: 2em;
     margin-top: 4em;
   }
-  input {
+  input[type=text],
+  input[type=password] {
     max-width: 100%;
     width: 15em;
   }
+  label[for] {
+    cursor: pointer;
+  }
+  label[for=rememberMe] {
+    text-align: center;
+  }
+
   #wrapper > form h2 {
     text-align: center;
   }
@@ -46,6 +54,10 @@
     width: 100%;
   }
 
+  #responseError {
+    color: #A52;
+  }
+
   @media only screen and (max-width: 60rem) {
     #wrapper {
       background: #fff;
@@ -56,10 +68,10 @@
       box-shadow: unset;
     }
   }
-
 </style>
+
 <div id=wrapper>
-  <form method="POST" action="/ui/login">
+  <form onsubmit="handleLogin(this);return false;">
     <h2>Login</h2>
 
     <label for=username>Username</label>
@@ -68,7 +80,67 @@
     <label for=password>Password</label>
     <input id=password name=password type=password>
 
+    <label for="rememberMe"><input type="checkbox" id="rememberMe">&nbsp;Remember me</label>
+
+    <center id="responseError"></center>
     <button type=submit>Login</button>
   </form>
 </div>
+
+<script>
+
+  function formData(form) {
+    return [...form.querySelectorAll('[name]')]
+      .reduce((r,el) => {
+        r[el.name] = el.value;
+        return r;
+      }, {});
+  }
+
+  async function handleLogin(form) {
+    responseError.innerText = '';
+    const data     = formData(form);
+    const response = await fetch('/api/v1/identity/auth/password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if ((![200,401,403].includes(response.status)) || (response.headers.get('content-type').split(';').shift() !== 'application/json')) {
+      responseError.innerText = 'request-error';
+      return;
+    }
+
+    // Handle errors
+    const responseData = await response.json();
+    if (!responseData.ok) {
+      if (responseData.message) {
+        responseError.innerText = responseData.message;
+      } else if (responseData.field) {
+        responseError.innerText = 'field: ' + responseData.field;
+      } else {
+        responseError.innerText = 'generic-error';
+      }
+      return;
+    }
+
+    // Store according to chosen persistence
+    if (rememberMe.checked) {
+      localStorage.authToken  = response.token;
+      localStorage.authClaims = response.claims;
+    } else {
+      sessionStorage.authToken  = response.token;
+      sessionStorage.authClaims = response.claims;
+    }
+
+    // TODO: handle redirects
+
+    // Fallback to dashboard url
+    document.location.href = '/ui/';
+  }
+
+  // TODO: refresh token & redirect back
+
+</script>
 {% endblock %}

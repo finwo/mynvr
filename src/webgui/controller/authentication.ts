@@ -28,13 +28,10 @@ export const loginInputSchema = {
 export type LoginInput = FromSchema<typeof loginInputSchema>;
 export const isLoginInput: (subject:any)=>subject is LoginInput = ajv.compile(loginInputSchema);
 
-
 @Controller("/ui")
 export class AuthenticationController {
   constructor(
-    private template: Template,
-    private validateUsernamePasswordQuery: ValidateUsernamePasswordQuery,
-    private generateAuthTokenCommand: GenerateAuthTokenCommand
+    private template: Template
   ) {}
 
   @Get()
@@ -44,47 +41,4 @@ export class AuthenticationController {
     res.header('Content-Type', 'text/html');
     res.send(this.template.render('page/login'));
   }
-
-  @Post("/login")
-  async handleLogin(
-    @Req() req: FastifyRequest,
-    @Res() res: FastifyReply
-  ) {
-    // res.header('Content-Type', 'text/html');
-
-    if (!isLoginInput(req.body)) {
-      res.statusCode = 401;
-      res.header('Content-Type', 'application/json');
-      return res.send({
-        ok   : false,
-        error: 'invalid-input',
-      });
-    }
-
-    const ident = await this.validateUsernamePasswordQuery.execute({ user: req.body.username, password: req.body.password });
-    if (!ident) {
-      res.statusCode = 403;
-      res.header('Content-Type', 'application/json');
-      return res.send({
-        ok   : false,
-        error: 'invalid-credentials',
-      });
-    }
-
-    const token = await this.generateAuthTokenCommand.execute(ident);
-    if (!token) {
-      res.statusCode = 500;
-      res.header('Content-Type', 'application/json');
-      return res.send({
-        ok   : false,
-        error: 'internal-error',
-      });
-    }
-
-    res.send({
-      ok: true,
-      token,
-    });
-  }
-
 }

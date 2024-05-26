@@ -48,11 +48,12 @@ export class GenerateAuthTokenCommand {
     })();
   }
 
-  async execute(input: Input): Promise<false | string> {
+  async execute(input: Input) {
     if (!isInput(input)) return false;
 
     const kp  = await this.kp;
     const now = Math.floor(Date.now() / 1000);
+    const exp = now + (3600 * 24 * 7);
 
     const headerData: Record<string, string|number> = {
       alg: 'ED25519',
@@ -61,31 +62,16 @@ export class GenerateAuthTokenCommand {
     const bodyData: Record<string, string|number> = {
       sub: input.user.id,
       iat: now,
-      exp: now + (3600 * 24 * 7),
+      exp: exp,
     };
 
     const header    = base64url.encode(JSON.stringify(headerData));
     const body      = base64url.encode(JSON.stringify(bodyData));
     const signature = base64url.encode(await kp.sign(header + '.' + body));
 
-    // // Prevent double username
-    // const found = await this.userRepository.getByUsername(input.user);
-    // if (found) return Output.Conflict;
-
-    // // Create the user
-    // const user: Partial<User> = { username: input.user };
-    // await this.userRepository.save(user);
-    // if (!isUser(user)) return Output.InternalError;
-
-    // // TODO: let this make use of the make-credential command
-    // const credential: Credential = {
-    //   userId     : user.id,
-    //   type       : 'password',
-    //   descriptor : 'pbkdf2:10000:sha512:' + pbkdf2Sync(input.password, input.user, 10000, 32, 'sha512').toString('hex'),
-    // };
-    // await this.credentialRepository.save(credential);
-    // if (!credential.id) return Output.InternalError;
-
-    return header + '.' + body + '.' + signature;
+    return {
+      token : header + '.' + body + '.' + signature,
+      claims: bodyData,
+    };
   }
 }
