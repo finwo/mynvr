@@ -11,7 +11,16 @@ export class AssetController {
     @Res() res: FastifyReply
   ) {
     res.header('Content-Type', 'application/javascript');
-    const content = readFileSync(resolve(__dirname, '../../../node_modules/htmx.org/dist/htmx.js'));
+    const content = readFileSync(resolve(__dirname, '../../../node_modules/htmx.org/dist/htmx.min.js'));
+    res.send(content);
+  }
+
+  @Get("/fwebc.js")
+  async serveFwebc(
+    @Res() res: FastifyReply
+  ) {
+    res.header('Content-Type', 'application/javascript');
+    const content = readFileSync(resolve(__dirname, '../../../node_modules/fwebc/fwebc.min.js'));
     res.send(content);
   }
 

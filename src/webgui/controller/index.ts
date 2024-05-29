@@ -3,4 +3,5 @@ export const controllers = [
   require('./authentication').AuthenticationController,
   require('./dashboard').DashboardController,
   require('./legal').LegalController,
+  require('./partial').PartialController,
 ];

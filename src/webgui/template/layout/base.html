@@ -7,17 +7,42 @@
     {% include "partial/styling.html" %}
   </head>
   <body>
-    <script src="/ui/assets/htmx.js"></script>
     <script>
-      htmx.on('htmx:configRequest', (e) => {
-        if (!(('authToken' in localStorage) || ('authToken' in sessionStorage))) return;
-        const token = JSON.parse(localStorage.authToken || sessionStorage.authToken);
-        if (token) e.details.headers['Authorization'] = `Bearer ${token}`;
+      document.body.addEventListener('htmx:configRequest', (e) => {
+        const token = localStorage.authToken || sessionStorage.authToken;
+        if (token) e.detail.headers['Authorization'] = 'Bearer ' + JSON.parse(token);
       });
+    </script>
+
+    <script>
+      const qs = {
+        encode(subject) {
+          if (!subject) return '';
+          if ('object' !== typeof subject) return '';
+          return Object
+            .entries(subject)
+            .map(([key,value]) => value ? encodeURIComponent(key) + '=' + encodeURIComponent(value) : false)
+            .filter(e=>e)
+            .join('&')
+        },
+        decode(subject) {
+          if (['#','?'].includes(subject.substring(0, 1))) subject = subject.substring(1);
+          if (!subject) return {};
+          return subject
+            .split('&')
+            .reduce((r, a) => {
+              const [key, value] = a.split('=');
+              r[decodeURIComponent(key)] = decodeURIComponent(value);
+              return r;
+            }, {})
+        }
+      };
+
     </script>
     {% block body %}
       Common Layout
     {% endblock %}
     {% include "partial/cookie-banner.html" %}
+    <script src="/ui/assets/htmx.js"></script>
   </body>
 </html>

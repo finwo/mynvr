@@ -134,10 +134,13 @@
       sessionStorage.authClaims = JSON.stringify(responseData.claims);
     }
 
-    // TODO: handle redirects
-
-    // Fallback to dashboard url
-    document.location.href = '/ui/';
+    // Redirect to requested or dashboard
+    const search = qs.decode(document.location.search);
+    if (search.redirectUri) {
+      document.location.href = search.redirectUri;
+    } else {
+      document.location.href = '/ui/';
+    }
   }
 
   // TODO: refresh token & redirect back
