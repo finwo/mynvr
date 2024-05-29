@@ -127,11 +127,11 @@
 
     // Store according to chosen persistence
     if (rememberMe.checked) {
-      localStorage.authToken  = response.token;
-      localStorage.authClaims = response.claims;
+      localStorage.authToken  = JSON.stringify(responseData.token);
+      localStorage.authClaims = JSON.stringify(responseData.claims);
     } else {
-      sessionStorage.authToken  = response.token;
-      sessionStorage.authClaims = response.claims;
+      sessionStorage.authToken  = JSON.stringify(responseData.token);
+      sessionStorage.authClaims = JSON.stringify(responseData.claims);
     }
 
     // TODO: handle redirects
