@@ -4,7 +4,7 @@ import * as nunjucks from 'nunjucks';
 
 class Loader {
   getSource(name: string) {
-    const path = __dirname + '/' + name + '.html';
+    const path = __dirname + '/' + name;
     return {
       path,
       noCache: false,

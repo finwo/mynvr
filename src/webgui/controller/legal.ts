@@ -15,7 +15,7 @@ export class LegalController {
     @Res() res: FastifyReply
   ) {
     res.header('Content-Type', 'text/html');
-    res.send(this.template.render('page/cookies'));
+    res.send(this.template.render('page/cookies.html'));
     // res.send(cookiePage());
   }
 

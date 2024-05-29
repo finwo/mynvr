@@ -1,13 +1,25 @@
-{% include "partial/reset-css" %}
+{% include "partial/reset-css.html" %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --fg-primary: #222;
+    --bg-primary: #FFF;
+    --fg-secondary: #FFF;
+    --bg-secondary: #222;
+    --bg-secondary-light: #555;
+    --transition-speed: 300ms;
+  }
   html {
     font-family: Nunito, sans-serif;
   }
+  body {
+    background: var(--bg-primary);
+    color: var(--fg-primary);
+  }
   html, body {
-    min-height: 100%;
+    min-height: 100vh;
   }
   input[type=text],
   input[type=password] {
@@ -16,8 +28,8 @@
     padding: 0.5em;
   }
   button {
-    background: #222;
-    color: #fff;
+    background: var(--bg-secondary);
+    color: var(--fg-secondary);
     padding: 0.5em;
     border: none;
   }

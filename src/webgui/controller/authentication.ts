@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Res, Req } from '@finwo/router';
+import { Controller, Get, Res, Req } from '@finwo/router';
 import { ValidateUsernamePasswordQuery } from '@identity/query/validate-username-password';
 import { GenerateAuthTokenCommand } from '@identity/command/generate-auth-token';
 import { FastifyRequest, FastifyReply   } from 'fastify';
@@ -34,11 +34,11 @@ export class AuthenticationController {
     private template: Template
   ) {}
 
-  @Get()
+  @Get("/login")
   async loginPage(
     @Res() res: FastifyReply
   ) {
     res.header('Content-Type', 'text/html');
-    res.send(this.template.render('page/login'));
+    res.send(this.template.render('page/login.html'));
   }
 }

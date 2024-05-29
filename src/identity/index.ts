@@ -33,5 +33,4 @@ setTimeout(async () => {
     found.authkey_sec = Buffer.from(kp.secretKey).toString('hex');
     await configRepository.put(found);
   }
-  console.log({ found });
 }, 0);
