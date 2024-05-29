@@ -10,7 +10,8 @@
     <script src="/ui/assets/htmx.js"></script>
     <script>
       htmx.on('htmx:configRequest', (e) => {
-        const token = localStorage.authToken || sessionStorage.authToken;
+        if (!(('authToken' in localStorage) || ('authToken' in sessionStorage))) return;
+        const token = JSON.parse(localStorage.authToken || sessionStorage.authToken);
         if (token) e.details.headers['Authorization'] = `Bearer ${token}`;
       });
     </script>
