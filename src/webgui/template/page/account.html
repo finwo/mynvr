@@ -1,0 +1,23 @@
+{% extends "layout/webmin.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block body %}
+{{ super() }}
+
+<style>
+#logoutButton {
+  background-color: #A22;
+}
+</style>
+
+<main>
+  <h2>Account</h2>
+
+  <button id="logoutButton" onclick="handleLogout();">
+    Log out
+  </button>
+
+</main>
+
+{% endblock %}
