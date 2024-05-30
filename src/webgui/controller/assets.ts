@@ -2,6 +2,9 @@ import { Controller, Get, Req, Res    } from '@finwo/router';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { readFileSync                 } from 'fs';
 import { resolve                      } from 'path';
+import   mime                           from 'mime-types';
+
+const assetDir = resolve(__dirname, '../../../assets');
 
 @Controller("/ui/assets")
 export class AssetController {
@@ -15,21 +18,28 @@ export class AssetController {
     res.send(content);
   }
 
-  @Get("/fwebc.js")
-  async serveFwebc(
-    @Res() res: FastifyReply
-  ) {
-    res.header('Content-Type', 'application/javascript');
-    const content = readFileSync(resolve(__dirname, '../../../node_modules/fwebc/fwebc.min.js'));
-    res.send(content);
-  }
-
-  @Get("/authentication.jpeg")
+  @Get("/:filename")
   async serveAuthenticationBackground(
+    @Req() req: FastifyRequest,
     @Res() res: FastifyReply
   ) {
-    res.header('Content-Type', 'image/jpeg');
-    const content = readFileSync(resolve(__dirname, '../../../assets/authentication-background.jpeg'));
+
+    // Basic filter
+    const { filename } = req.params as Record<string, string>;
+    if (!filename) {
+      res.statusCode = 400;
+      res.send({ ok: false, error: 'bad-request' });
+    }
+
+    // Static dir filter
+    const fullPath = resolve(__dirname, '../../../assets', filename);
+    if (fullPath.substring(0, assetDir.length) !== assetDir) {
+      res.statusCode = 400;
+      res.send({ ok: false, error: 'bad-request' });
+    }
+
+    res.header('Content-Type', mime.lookup(fullPath));
+    const content = readFileSync(fullPath);
     res.send(content);
   }
 
