@@ -1,0 +1,30 @@
+<form
+  hx-post="/ui/form/camera-details.html"
+>
+
+  <div class="form-group">
+    <label for="camera-name">Name</label>
+    <input id="camera-name" type="text" name="name" />
+  </div>
+
+  <div class="form-group">
+    <label for="camera-type">Type</label>
+    <select id="camera-type" name="type">
+      <option value="rtsp">RTSP</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="camera-source">Source</label>
+    <input id="camera-source" type="text" name="source" />
+  </div>
+
+  {% if error %}
+  <div style="color:red;">{{ error }}</div>
+  {% endif %}
+
+  <button type="submit">
+    Add
+  </button>
+
+</form>

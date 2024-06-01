@@ -12,12 +12,16 @@ export const cameraSchema = {
     name: {
       type: 'string',
     },
+    type: {
+      enum: ['rtsp'],
+    },
     source: {
       type: 'string',
     },
   },
   required: [
     'name',
+    'type',
   ],
 } as const;
 

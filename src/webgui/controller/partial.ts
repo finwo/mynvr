@@ -78,7 +78,6 @@ export class PartialController {
     @Res() res: FastifyReply
   ) {
     if (!req.auth) throw new Error();
-
     res.header('Content-Type', 'text/html');
     res.send(this.template.render('partial/camera-overview.html', {
       user: req.auth.user,
