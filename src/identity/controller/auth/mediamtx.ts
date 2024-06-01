@@ -14,6 +14,7 @@ export class IdentityAuthMediamtxController {
     @Req() req: FastifyRequest,
     @Res() res: FastifyReply
   ) {
+    console.log('Mediamtx requested auth');
 
     // Sanity check
     if (!isInput(req.body)) {

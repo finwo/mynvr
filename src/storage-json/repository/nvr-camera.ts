@@ -1,5 +1,4 @@
 import { Service                                 } from '@finwo/di';
-import { v4 as uuidv4                            } from 'uuid';
 import { CameraRepository, FindOptions, Callback } from '@nvr/repository/camera';
 import { Camera, isCamera                        } from '@nvr/model/camera';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
@@ -8,7 +7,7 @@ const storageFile = (process.env.STORAGE_DIR || '/data') + '/cameras.json';
 
 @Service()
 export class NvrCameraJsonRepository extends CameraRepository {
-  private _listeners: Record<string, Callback<Camera>[]> = {};
+  private _listeners: Record<string, Callback<Partial<Camera>>[]> = {};
 
   private getContents(): Camera[] {
     try {
@@ -33,17 +32,7 @@ export class NvrCameraJsonRepository extends CameraRepository {
       ;
   }
 
-  async get(cameraId: string): Promise<Camera|undefined> {
-    return this
-      .getContents()
-      .find(entry => {
-        if (!isCamera(entry)) return false;
-        return entry.id === cameraId;
-      })
-      ;
-  }
-
-  async getByName(cameraName: string): Promise<Camera|undefined> {
+  async get(cameraName: string): Promise<Camera|undefined> {
     return this
       .getContents()
       .find(entry => {
@@ -52,29 +41,38 @@ export class NvrCameraJsonRepository extends CameraRepository {
       })
   }
 
-  async deleteById(cameraId: string): Promise<boolean> {
+  async delete(cameraName: string): Promise<boolean> {
+    await this.emit('pre-delete', { name: cameraName });
     this.putContents(this.getContents().filter(entry => {
       if (!isCamera(entry)) return false;
-      return entry.id !== cameraId;
+      return entry.name !== cameraName;
     }));
+    await this.emit('post-delete', { name: cameraName });
     return true;
   }
 
   async save(camera: Partial<Camera>): Promise<boolean> {
-    if (!camera.id) camera.id = uuidv4();
+    await this.emit('pre-save', camera);
     if (!isCamera(camera)) return false;
     const contents = this.getContents().filter(entry => {
       if (!isCamera(entry)) return false;
-      return entry.id !== camera.id;
+      return entry.name !== camera.name;
     });
     contents.push(camera);
     this.putContents(contents);
+    await this.emit('post-save', camera);
     return true;
   }
 
-  onSave(fn: Callback<Camera>): void {
-    if (!('save' in this._listeners)) this._listeners['save'] = [];
-    this._listeners['save'].push(fn);
+  on(name: string, fn: Callback<Partial<Camera>>): void {
+    if (!(name in this._listeners)) this._listeners[name] = [];
+    this._listeners[name].push(fn);
+  }
+
+  async emit(name: string, subject: Partial<Camera>): Promise<void> {
+    for(const fn of (this._listeners[name]||[])) {
+      await fn(subject);
+    }
   }
 
 }

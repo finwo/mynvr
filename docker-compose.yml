@@ -35,7 +35,8 @@ services:
       - 4000:4000
     environment:
       - PORT=4000
-      - STORAGE_DIR=/data
-      - MEDIAMTX_API=http://mediamtx:9997/
+      - RECORDING_DIR=/data/recordings
+      - MEDIAMTX_API=http://mediamtx:9997
+      - RECORD_PATH=/data
     volumes:
       - ./data:/data

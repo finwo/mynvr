@@ -6,9 +6,6 @@ export const cameraSchema = {
   title     : 'Camera',
   type      : 'object',
   properties: {
-    id: {
-      type: 'string',
-    },
     name: {
       type: 'string',
     },

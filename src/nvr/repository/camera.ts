@@ -10,9 +10,10 @@ export type Callback<T> = (arg0:T)=>void;
 @Service()
 export abstract class CameraRepository {
   abstract find(opts?: FindOptions): Promise<Camera[]>;
-  abstract get(cameraId: string): Promise<Camera|undefined>;
-  abstract getByName(cameraName: string): Promise<Camera|undefined>;
-  abstract deleteById(cameraId: string): Promise<boolean>;
+  abstract get(cameraName: string): Promise<Camera|undefined>;
+  abstract delete(cameraName: string): Promise<boolean>;
   abstract save(camera: Partial<Camera>): Promise<boolean>;
-  abstract onSave(fn:Callback<Camera>): void;
+  abstract on(name: string, fn: Callback<Partial<Camera>>): void;
+  abstract emit(name: string, subject: Partial<Camera>): Promise<void>;
+
 };
