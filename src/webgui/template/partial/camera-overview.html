@@ -1,0 +1,19 @@
+<style>
+  #addCameraButton {
+    background-color: #282;
+  }
+</style>
+
+<button
+  id="addCameraButton"
+  hx-get="/ui/partial/camera-details-form.html"
+  hx-trigger="click"
+  hx-target="#camera-overview"
+  hx-swap="outerHTML"
+>
+  Add
+</button>
+
+{% for camera in cameras %}
+  {% include "partial/camera-summary.html" %}
+{% endfor %}
