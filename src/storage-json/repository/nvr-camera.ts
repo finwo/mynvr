@@ -1,13 +1,14 @@
-import { Service                       } from '@finwo/di';
-import { v4 as uuidv4                  } from 'uuid';
-import { CameraRepository, FindOptions } from '@nvr/repository/camera';
-import { Camera, isCamera              } from '@nvr/model/camera';
+import { Service                                 } from '@finwo/di';
+import { v4 as uuidv4                            } from 'uuid';
+import { CameraRepository, FindOptions, Callback } from '@nvr/repository/camera';
+import { Camera, isCamera                        } from '@nvr/model/camera';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 
 const storageFile = (process.env.STORAGE_DIR || '/data') + '/cameras.json';
 
 @Service()
 export class NvrCameraJsonRepository extends CameraRepository {
+  private _listeners: Record<string, Callback<Camera>[]> = {};
 
   private getContents(): Camera[] {
     try {
@@ -71,5 +72,9 @@ export class NvrCameraJsonRepository extends CameraRepository {
     return true;
   }
 
+  onSave(fn: Callback<Camera>): void {
+    if (!('save' in this._listeners)) this._listeners['save'] = [];
+    this._listeners['save'].push(fn);
+  }
 
 }

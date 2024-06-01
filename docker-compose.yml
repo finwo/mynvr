@@ -36,5 +36,6 @@ services:
     environment:
       - PORT=4000
       - STORAGE_DIR=/data
+      - MEDIAMTX_API=http://mediamtx:9997/
     volumes:
       - ./data:/data
