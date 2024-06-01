@@ -26,6 +26,7 @@
       "@identity/*": ["./src/identity/*"],
       "@storage-json/*": ["./src/storage-json/*"],
       "@webgui/*": ["./src/webgui/*"],
+      "@nvr/*": ["./src/nvr/*"],
     }
   },
   "include": ["src/**/*"]

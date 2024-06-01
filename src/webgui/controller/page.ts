@@ -1,11 +1,12 @@
 import { Controller, Middleware, Get, Res, Req } from '@finwo/router';
 import { FastifyRequest, FastifyReply   } from 'fastify';
+
 import { Template } from '@webgui/template';
 
 @Controller("/ui")
 export class PageController {
   constructor(
-    private template: Template
+    private template: Template,
   ) {}
 
   @Get()

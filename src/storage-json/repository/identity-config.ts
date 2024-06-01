@@ -4,8 +4,6 @@ import { ConfigRepository } from '@identity/repository/config';
 import { Config, isConfig } from '@identity/model/config';
 import { TripleRepository, Triple } from './triple';
 
-const storageFile = (process.env.STORAGE_DIR || '/data') + '/users.json';
-
 @Service()
 export class IdentityConfigJsonRepository extends ConfigRepository {
   constructor(
