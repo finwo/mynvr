@@ -1,3 +1,6 @@
 <div class="camera-summary">
-  I am {{ camera.name }}
+  <h4>{{ camera.name }}</h4>
+  <template data-src="/ui/snapshot/{{ camera.name }}.jpg?auth=${JSON.parse(localStorage.authToken)}">
+    <img src="${src}"/>
+  </template>
 </div>

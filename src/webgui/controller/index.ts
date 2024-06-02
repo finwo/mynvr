@@ -5,4 +5,5 @@ export const controllers = [
   require('./legal').LegalController,
   require('./partial').PartialController,
   require('./page').PageController,
+  require('./snapshot').SnapshotController,
 ];

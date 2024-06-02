@@ -2,6 +2,20 @@
   #addCameraButton {
     background-color: #282;
   }
+  #camera-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 -1rem;
+  }
+  #camera-list > .camera-summary {
+    flex-basis: 25em;
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+  .camera-summary {
+    margin: 1rem;
+  }
 </style>
 
 <button
@@ -14,6 +28,8 @@
   Add
 </button>
 
-{% for camera in cameras %}
-  {% include "partial/camera-summary.html" %}
-{% endfor %}
+<div id="camera-list">
+  {% for camera in cameras %}
+    {% include "partial/camera-summary.html" %}
+  {% endfor %}
+</div>
