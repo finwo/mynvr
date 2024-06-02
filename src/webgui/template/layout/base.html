@@ -12,6 +12,22 @@
         const token = localStorage.authToken || sessionStorage.authToken;
         if (token) e.detail.headers['Authorization'] = 'Bearer ' + JSON.parse(token);
       });
+      document.body.addEventListener('htmx:afterSwap', (e) => {
+        const tmpls = [...document.body.querySelectorAll('template')];
+        for(const tmpl of tmpls) {
+          const content = tmpl.innerHTML;
+          const context = Object.keys(tmpl.dataset).reduce((r, key) => {
+            r[key] = (new Function('localStorage', 'return `'+tmpl.dataset[key]+'`;'))(localStorage);
+            return r;
+          }, {});
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = (new Function(...Object.keys(context), 'return `'+content+'`;'))(...Object.values(context));
+          [...wrapper.children].forEach(child => {
+            tmpl.parentNode.insertBefore(child, tmpl);
+          });
+          tmpl.parentNode.removeChild(tmpl);
+        }
+      });
     </script>
 
     <script>
