@@ -37,6 +37,7 @@ services:
       - PORT=4000
       - RECORDING_DIR=/data/recordings
       - MEDIAMTX_API=http://mediamtx:9997
+      - MEDIAMTX_RTSP=rtsp://mediamtx:8554
       - RECORD_PATH=/data
     volumes:
       - ./data:/data

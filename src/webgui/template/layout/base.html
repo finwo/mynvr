@@ -8,29 +8,6 @@
   </head>
   <body>
     <script>
-      document.body.addEventListener('htmx:configRequest', (e) => {
-        const token = localStorage.authToken || sessionStorage.authToken;
-        if (token) e.detail.headers['Authorization'] = 'Bearer ' + JSON.parse(token);
-      });
-      document.body.addEventListener('htmx:afterSwap', (e) => {
-        const tmpls = [...document.body.querySelectorAll('template')];
-        for(const tmpl of tmpls) {
-          const content = tmpl.innerHTML;
-          const context = Object.keys(tmpl.dataset).reduce((r, key) => {
-            r[key] = (new Function('localStorage', 'return `'+tmpl.dataset[key]+'`;'))(localStorage);
-            return r;
-          }, {});
-          const wrapper = document.createElement('div');
-          wrapper.innerHTML = (new Function(...Object.keys(context), 'return `'+content+'`;'))(...Object.values(context));
-          [...wrapper.children].forEach(child => {
-            tmpl.parentNode.insertBefore(child, tmpl);
-          });
-          tmpl.parentNode.removeChild(tmpl);
-        }
-      });
-    </script>
-
-    <script>
       const qs = {
         encode(subject) {
           if (!subject) return '';
@@ -54,7 +31,59 @@
         }
       };
 
+      function elementExists(el) {
+        while(el.parentNode) {
+          if (el.parentNode == document.body) return true;
+          el = el.parentNode;
+        };
+        return false;
+      }
+
+      document.body.addEventListener('htmx:configRequest', (e) => {
+        const token = localStorage.authToken || sessionStorage.authToken;
+        if (token) e.detail.headers['Authorization'] = 'Bearer ' + JSON.parse(token);
+      });
+      document.body.addEventListener('htmx:afterSwap', (e) => {
+        const tmpls = [...document.body.querySelectorAll('template')];
+        for(const tmpl of tmpls) {
+          const content = tmpl.innerHTML;
+          const context = Object.keys(tmpl.dataset).reduce((r, key) => {
+            r[key] = (new Function('localStorage', 'return `'+tmpl.dataset[key]+'`;'))(localStorage);
+            return r;
+          }, {});
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = (new Function(...Object.keys(context), 'return `'+content+'`;'))(...Object.values(context));
+          [...wrapper.children].forEach(child => {
+            tmpl.parentNode.insertBefore(child, tmpl);
+          });
+          tmpl.parentNode.removeChild(tmpl);
+        }
+      });
+      document.body.addEventListener('htmx:afterSwap', (e) => {
+        const imgs = [...document.body.querySelectorAll('img[data-refresh]')];
+        for(const img of imgs) {
+          const ms = parseFloat(img.dataset.refresh) * 1000;
+          delete img.dataset.refresh;
+          if (ms < 1000) continue;
+          img.loaded = true;
+          img.onload = () => {
+            img.loaded = true;
+          };
+          const interval = setInterval(() => {
+            if (!elementExists(img)) return clearInterval(interval);
+            if (!img.loaded) return;
+            img.loaded = false;
+            const u = new URL(img.src, document.location);
+            const q = qs.decode(u.search || '');
+            q._     = Date.now();
+            u.search = '?' + qs.encode(q);
+            img.src = u.toString();
+          }, ms);
+          console.log(img);
+        }
+      });
     </script>
+
     {% block body %}
       Common Layout
     {% endblock %}

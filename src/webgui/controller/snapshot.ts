@@ -1,7 +1,7 @@
+import { spawn                                 } from 'child_process';
 import { URL                                   } from 'url';
 import { resolve                               } from 'path';
 import { readFileSync                          } from 'fs';
-import   mime                                    from 'mime-types';
 import { Controller, Get, Req, Res, Middleware } from '@finwo/router';
 import { FastifyReply                          } from 'fastify';
 import { AuthenticatedRequest                  } from '@identity/model/authenticated-request';
@@ -15,7 +15,11 @@ const partialDir = resolve(__dirname, '../template/partial');
 export class SnapshotController {
   constructor(
     private cameraRepository: CameraRepository
-  ) {}
+  ) {
+    if (!('MEDIAMTX_RTSP' in process.env)) {
+      throw new Error('Missing MEDIAMTX_RTSP env var');
+    }
+  }
 
   @Get("/:filename")
   @Middleware(authenticated)
@@ -23,79 +27,62 @@ export class SnapshotController {
     @Req() req: AuthenticatedRequest,
     @Res() res: FastifyReply
   ) {
+
+    // No redirect, just permission denied
     if (!req.auth) {
       res.statusCode = 403;
       return res.send();
     }
 
-    const [ cameraName, extension ] = (req.params as Record<string, string>).filename;
-    console.log({ cameraName, extension });
+    // Sanity checking
+    const params = req.params as Record<string, string>;
+    if (!params.filename) {
+      res.statusCode = 400;
+      return res.send();
+    }
 
-    res.statusCode = 204;
-    res.send();
+    const encoders = {
+      png  : [ 'png'    , 'image/png'  ],
+      webp : [ 'libwebp', 'image/webp' ],
+    };
 
-    // // Basic filter
-    // const { name } = req.params as Record<string, string>;
-    // if (!name) {
-    //   res.statusCode = 400;
-    //   res.send('Bad request');
-    // }
+    // Retrieve what we should snapshot
+    const [ cameraName, extension ] = params.filename.split('.') as [ string, keyof (typeof encoders) ];
+    if (!(extension in encoders)) {
+      res.statusCode = 404;
+      return res.send();
+    }
 
-    // // Static dir filter
-    // const fullPath = resolve(partialDir, name);
-    // if (fullPath.substring(0, partialDir.length) !== partialDir) {
-    //   res.statusCode = 400;
-    //   res.send('Bad request');
-    // }
+    // Validate cameraName
+    const camera = await this.cameraRepository.get(cameraName);
+    if (!camera) {
+      res.statusCode = 404;
+      return res.send();
+    }
 
-    // res.header('Content-Type', mime.lookup(fullPath));
-    // const content = readFileSync(fullPath);
-    // res.send(content);
+    const command = 'ffmpeg';
+    const args    = [
+      '-rtsp_transport', 'tcp',
+      '-i', `${process.env.MEDIAMTX_RTSP}/${camera.name}`,
+      '-frames:v', '1',
+      '-c:v', encoders[extension][0],
+      '-f', 'rawvideo',
+      '-an',
+      '-'
+    ];
+    const child = spawn(command, args);
+    let   response = Buffer.alloc(0);
+
+    child.stdout.on('data', chunk => {
+      response = Buffer.concat([ response, chunk ]);
+    });
+
+    child.on('close', () => {
+      // Cleanup?
+    });
+
+    res.statusCode = 200;
+    res.header('Content-Type', encoders[extension][1]);
+    return child.stdout;
   }
-
-  // @Get("/nav.html")
-  // @Middleware(authenticated)
-  // @Middleware(requireAuthentication())
-  // async serveNav(
-  //   @Req() req: AuthenticatedRequest,
-  //   @Res() res: FastifyReply
-  // ) {
-  //   if (!req.auth) throw new Error();
-  //
-  //   // Parse & normalize referer
-  //   const referer = new URL(req.headers['hx-current-url'] || req.headers.referer || '');
-  //   if (referer.pathname.substring(referer.pathname.length-1) == '/') {
-  //     referer.pathname = referer.pathname.substring(0, referer.pathname.length - 1);
-  //   }
-  //
-  //   res.header('Content-Type', 'text/html');
-  //   res.send(this.template.render('partial/nav.html', {
-  //     referer,
-  //     user: req.auth.user,
-  //     site: {
-  //       title: 'MyNVR',
-  //     }
-  //   }));
-  //
-  // }
-  //
-  // @Get("/camera-overview.html")
-  // @Middleware(authenticated)
-  // @Middleware(requireAuthentication())
-  // async serveCameraOverview(
-  //   @Req() req: AuthenticatedRequest,
-  //   @Res() res: FastifyReply
-  // ) {
-  //   if (!req.auth) throw new Error();
-  //   res.header('Content-Type', 'text/html');
-  //   res.send(this.template.render('partial/camera-overview.html', {
-  //     user: req.auth.user,
-  //     site: {
-  //       title: 'MyNVR',
-  //     },
-  //     cameras: await this.cameraRepository.find(),
-  //   }));
-  // }
-
-
 }

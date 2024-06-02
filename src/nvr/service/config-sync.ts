@@ -28,6 +28,18 @@ export class ConfigSyncService {
   async refreshConfig() {
     const config = await this.configRepository.get();
 
+    const globalConfigUrl = `${this.baseUrl}/v3/config/global/patch`;
+    const globalConfigResponse = await (await fetch(globalConfigUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        rtsp: true,
+        api : true,
+      }),
+    })).text();
+
     const pathDefaultsUrl = `${this.baseUrl}/v3/config/pathdefaults/patch`;
     const pathDefaultsResponse = await (await fetch(pathDefaultsUrl, {
       method: 'PATCH',
@@ -43,7 +55,7 @@ export class ConfigSyncService {
       }, config)),
     })).text();
 
-    console.log({ config, pathDefaultsResponse });
+    console.log({ config, globalConfigResponse, pathDefaultsResponse });
 
           // sourceOnDemand : false,
           // record         : true,

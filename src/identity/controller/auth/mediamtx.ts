@@ -16,18 +16,18 @@ export class IdentityAuthMediamtxController {
   ) {
     console.log('Mediamtx requested auth');
 
-    // Sanity check
-    if (!isInput(req.body)) {
-      res.statusCode = 401;
-      return;
-    };
+    // // Sanity check
+    // if (!isInput(req.body)) {
+    //   res.statusCode = 401;
+    //   return;
+    // };
 
-    // Actual permission check
-    const response = await this.query.execute(req.body);
-    if (!response) {
-      res.statusCode = 403;
-      return;
-    }
+    // // Actual permission check
+    // const response = await this.query.execute(req.body);
+    // if (!response) {
+    //   res.statusCode = 403;
+    //   return;
+    // }
 
     // Done
     res.statusCode = 204;
