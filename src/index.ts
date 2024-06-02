@@ -65,7 +65,7 @@ const app = Fastify({
   [
     ...nvrServices,
   ].forEach(svc => {
-    Container.get(svc);
+    Container.get(svc as { new(...args: any[]): any; });
   });
 
 })();

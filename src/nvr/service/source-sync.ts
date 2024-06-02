@@ -51,9 +51,6 @@ export class SourceSyncService {
         body: JSON.stringify({
           name           : need.name,
           source         : need.source,
-          sourceOnDemand : false,
-          record         : true,
-          recordPath     : `${process.env.RECORDING_DIR}/%path/%Y-%m-%d_%H-%M-%S-%f`,
         }),
       });
     }
