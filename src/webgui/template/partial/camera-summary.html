@@ -1,6 +1,6 @@
-<div class="camera-summary">
+<a class="camera-summary" href="/ui/cameras/{{ camera.name }}">
   <h4>{{ camera.name }}</h4>
   <template data-src="/ui/snapshot/{{ camera.name }}.webp?auth=${JSON.parse(localStorage.authToken)}">
-    <img src="${src}" data-refresh="5" />
+    <img src="${src}" data-refresh="1" />
   </template>
-</div>
+</a>

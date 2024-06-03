@@ -1,0 +1,50 @@
+{% extends "layout/webmin.html" %}
+
+{% block title %}Camera {{ camera.name }}{% endblock %}
+
+{% block body %}
+{{ super() }}
+
+<style>
+</style>
+
+<style>
+  #camera-preview {
+    display: inline-block;
+    width: 15rem;
+  }
+  #camera-details {
+    display: inline-block;
+  }
+  #wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #wrapper > * {
+    margin: 1rem;
+  }
+</style>
+
+<main>
+  <h2>Camera - {{ camera.name }}</h2>
+
+  <div id="wrapper">
+    <div id="camera-preview">
+      <h4>Preview</h4>
+      <template data-src="/ui/snapshot/{{ camera.name }}.webp?auth=${JSON.parse(localStorage.authToken)}">
+        <img src="${src}" data-refresh="1" />
+      </template>
+    </div>
+
+    <div
+      id="camera-details"
+      hx-trigger="load"
+      hx-get="/ui/partial/camera-details/{{ camera.name }}"
+      hx-target="#camera-details"
+      hx-swap="outerHTML"
+    >Loading...</div>
+
+  </div>
+</main>
+
+{% endblock %}

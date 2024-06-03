@@ -11,6 +11,11 @@ import { Template                              } from '@webgui/template';
 import { CameraRepository                      } from '@nvr/repository/camera';
 
 const partialDir = resolve(__dirname, '../template/partial');
+const commonData = {
+  site: {
+    title: 'MyNVR',
+  },
+};
 
 @Controller("/ui/partial")
 export class PartialController {
@@ -61,11 +66,9 @@ export class PartialController {
 
     res.header('Content-Type', 'text/html');
     res.send(this.template.render('partial/nav.html', {
+      ...commonData,
       referer,
       user: req.auth.user,
-      site: {
-        title: 'MyNVR',
-      }
     }));
 
   }
@@ -80,13 +83,26 @@ export class PartialController {
     if (!req.auth) throw new Error();
     res.header('Content-Type', 'text/html');
     res.send(this.template.render('partial/camera-overview.html', {
+      ...commonData,
       user: req.auth.user,
-      site: {
-        title: 'MyNVR',
-      },
       cameras: await this.cameraRepository.find(),
     }));
   }
 
+  @Get("/camera-details/:name")
+  @Middleware(authenticated)
+  @Middleware(requireAuthentication())
+  async serveCameraDetails(
+    @Req() req: AuthenticatedRequest,
+    @Res() res: FastifyReply
+  ) {
+    if (!req.auth) throw new Error();
+    res.header('Content-Type', 'text/html');
+    res.send(this.template.render('partial/camera-details.html', {
+      ...commonData,
+      user: req.auth.user,
+      camera: await this.cameraRepository.get((req.params as Record<string, string>).name),
+    }));
+  }
 
 }
