@@ -25,6 +25,9 @@ services:
 
   mediamtx:
     image: bluenviron/mediamtx
+    ports:
+      - 8888:8888
+      - 8889:8889
     volumes:
       - ./docker/mediamtx/config.yml:/mediamtx.yml
       - ./data:/data
@@ -38,6 +41,7 @@ services:
       - RECORDING_DIR=/data/recordings        # As seen from mediamtx
       - MEDIAMTX_API=http://mediamtx:9997     # As seen from agent
       - MEDIAMTX_RTSP=rtsp://mediamtx:8554    # As seen from agent
+      - MEDIAMTX_HLS=http://localhost:8888    # As seen from external
       - MEDIAMTX_WEBRTC=http://localhost:8889 # As seen from external
       - STORAGE_CLASS=json-file
       - STORAGE_DIR=/data                     # As seen from agent

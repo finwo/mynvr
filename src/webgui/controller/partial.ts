@@ -86,6 +86,10 @@ export class PartialController {
       ...commonData,
       user: req.auth.user,
       cameras: await this.cameraRepository.find(),
+      mediamtx: {
+        hls   : process.env.MEDIAMTX_HLS,
+        webrtc: process.env.MEDIAMTX_WEBRTC,
+      },
     }));
   }
 

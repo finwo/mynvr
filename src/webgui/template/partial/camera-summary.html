@@ -1,6 +1,31 @@
-<a class="camera-summary" href="/ui/cameras/{{ camera.name }}">
-  <h4>{{ camera.name }}</h4>
+<div class="camera-summary">
+  <h4><a href="/ui/cameras/{{ camera.name }}">{{ camera.name }}</a></h4>
   <template data-src="/ui/snapshot/{{ camera.name }}.webp?auth=${JSON.parse(localStorage.authToken)}">
-    <img src="${src}" data-refresh="1" />
+    <img src="${src}" data-refresh="1" onclick="viewCamera{{ camera.name }}(); return false;" />
   </template>
-</a>
+</div>
+
+<script>
+  function viewCamera{{ camera.name }}() {
+    const wrapper = document.createElement('div');
+    const frame   = document.createElement('iframe');
+
+    frame.scrolling     = "no";
+    frame.src           = "{{ mediamtx.hls }}/{{ camera.name }}";
+    frame.id            = 'dialog_{{ camera.name }}';
+    frame.style.display = 'inline-block';
+    frame.style.width   = 'calc(100vw - 10rem)';
+    frame.style.height  = 'calc((100vw - 10rem)*9/16)';
+    wrapper.appendChild(frame);
+
+    wrapper.style.background = '#0008';
+    wrapper.style.position   = 'fixed';
+    wrapper.style.padding    = '5rem';
+    wrapper.style.textAlign  = 'center';
+    wrapper.style.top        = 0;
+    wrapper.style.bottom     = 0;
+    wrapper.style.left       = 0;
+    wrapper.style.right      = 0;
+    document.body.appendChild(wrapper);
+  }
+</script>
