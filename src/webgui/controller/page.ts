@@ -1,5 +1,8 @@
-import { Controller, Middleware, Get, Res, Req } from '@finwo/router';
+import { Controller, Middleware, Get, Delete, Res, Req } from '@finwo/router';
 import { FastifyRequest, FastifyReply   } from 'fastify';
+import { AuthenticatedRequest           } from '@identity/model/authenticated-request';
+import   authenticated                    from '@identity/middleware/authenticated';
+import   requireAuthentication            from '@identity/middleware/require-authentication';
 
 import { Template } from '@webgui/template';
 import { CameraRepository } from '@nvr/repository/camera';
@@ -43,6 +46,31 @@ export class PageController {
         webrtc: process.env.MEDIAMTX_WEBRTC,
       },
     }));
+  }
+
+  @Delete('/cameras/:name')
+  @Middleware(authenticated)
+  @Middleware(requireAuthentication())
+  async deleteCamera(
+    @Req() req: AuthenticatedRequest,
+    @Res() res: FastifyReply
+  ) {
+    if (!req.auth) throw new Error();
+    const cameraName = (req.params as Record<string, string>).name;
+    if (!cameraName) throw new Error();
+
+    await this.cameraRepository.delete(cameraName);
+
+    const isHtmx = (req.headers['hx-request'] && req.headers['hx-request'] == 'true');
+    if (isHtmx) {
+      res.statusCode = 204;
+      res.header('HX-Redirect', '/ui/');
+      return res.send();
+    } else {
+      res.statusCode = 302;
+      res.header('Location', '/ui/');
+      return res.send();
+    }
   }
 
   @Get('/users')

@@ -4,27 +4,33 @@
 
   <div class="form-group">
     <label for="camera-name">Name</label>
-    <input id="camera-name" type="text" name="name" />
+    <input id="camera-name" type="text" name="name" {% if camera %}value="{{ camera.name }}"{% endif %}/>
   </div>
 
   <div class="form-group">
     <label for="camera-type">Type</label>
-    <select id="camera-type" name="type">
+    <select id="camera-type" name="type" {% if camera %}value="{{ camera.type }}"{% endif %}>
       <option value="rtsp">RTSP</option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="camera-source">Source</label>
-    <input id="camera-source" type="text" name="source" />
+    <input id="camera-source" type="text" name="source" {% if camera %}value="{{ camera.source }}"{% endif %}/>
   </div>
 
   {% if error %}
   <div style="color:red;">{{ error }}</div>
   {% endif %}
 
-  <button type="submit">
-    Add
-  </button>
+  {% if camera %}
+    <button type="submit">
+      Edit
+    </button>
+  {% else %}
+    <button type="submit">
+      Add
+    </button>
+  {% endif %}
 
 </form>

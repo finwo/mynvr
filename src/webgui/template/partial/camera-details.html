@@ -1,5 +1,27 @@
-<div id="camera-details">
-  <h4>Details</h4>
+<style>
+  #deleteButton {
+    background-color: var(--col-danger);
+  }
+  form {
+    flex-grow: 1;
+  }
+</style>
 
-  Details for {{ camera.name }}
-</div>
+{% include "form/camera-details.html" %}
+
+<script>
+  (() => {
+    const frm = [...document.querySelectorAll('form')].pop();
+    frm.setAttribute('hx-post', frm.getAttribute('hx-post') + '?camera={{ camera.name }}');
+    const btn = [...document.querySelectorAll('form button')].pop();
+    if (!btn) return;
+    const deleteButton = document.createElement('button');
+    deleteButton.setAttribute('hx-delete' , '/ui/cameras/{{ camera.name }}');
+    deleteButton.setAttribute('hx-trigger', 'click');
+    deleteButton.setAttribute('hx-confirm', 'Are you sure you want to delete {{ camera.name }}?');
+    deleteButton.style.backgroundColor = 'var(--col-danger)';
+    deleteButton.innerText = 'Delete';
+    btn.parentElement.insertBefore(deleteButton, btn.nextSibling);
+    htmx.process(frm);
+  })();
+</script>

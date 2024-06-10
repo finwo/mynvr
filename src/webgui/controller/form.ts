@@ -7,7 +7,7 @@ import   mime                                          from 'mime-types';
 import   authenticated                                 from '@identity/middleware/authenticated';
 import   requireAuthentication                         from '@identity/middleware/require-authentication';
 import { CameraRepository                            } from '@nvr/repository/camera';
-import { isCamera                                    } from '@nvr/model/camera';
+import { isCamera, Camera                            } from '@nvr/model/camera';
 import { AuthenticatedRequest                        } from '@identity/model/authenticated-request';
 
 const assetDir = resolve(__dirname, '../../../assets');
@@ -28,11 +28,20 @@ export class FormController {
   ) {
     if (!req.auth) throw new Error();
     res.header('Content-Type', 'text/html');
-    return res.send(this.template.render('form/camera-details.html', {
-      site: {
-        title: 'MyNVR',
-      }
-    }));
+
+    const data = {
+      site: {title:'MyNVR'},
+      req: {
+        query: req.query as Record<string, string>,
+      },
+      camera: undefined as (Camera | undefined)
+    };
+
+    if (data.req.query.camera) {
+      data.camera = await this.cameraRepository.get(data.req.query.camera);
+    }
+
+    return res.send(this.template.render('form/camera-details.html', data));
   }
 
   @Post("/camera-details.html")
@@ -59,13 +68,19 @@ export class FormController {
       }));
     }
 
+    // Prevent duplicate camera upon name update
+    const query = req.query as Record<string, string>;
+    if (query.camera && (req.body.name !== query.camera)) {
+      await this.cameraRepository.delete(query.camera);
+    }
+
     if (isHtmx) {
       res.statusCode = 204;
-      res.header('HX-Redirect', '/ui/');
+      res.header('HX-Redirect', '/ui/cameras/' + req.body.name);
       return res.send();
     } else {
       res.statusCode = 302;
-      res.header('Location', '/ui/');
+      res.header('Location', '/ui/cameras/' + req.body.name);
       return res.send();
     }
   }
