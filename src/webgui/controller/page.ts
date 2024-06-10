@@ -37,7 +37,11 @@ export class PageController {
       ...commonData,
       camera: {
         name: (req.params as Record<string, string>).name,
-      }
+      },
+      mediamtx: {
+        hls   : process.env.MEDIAMTX_HLS,
+        webrtc: process.env.MEDIAMTX_WEBRTC,
+      },
     }));
   }
 

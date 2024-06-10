@@ -10,12 +10,13 @@
     const wrapper = document.createElement('div');
     const frame   = document.createElement('iframe');
 
-    frame.scrolling     = "no";
-    frame.src           = "{{ mediamtx.hls }}/{{ camera.name }}";
-    frame.id            = 'dialog_{{ camera.name }}';
-    frame.style.display = 'inline-block';
-    frame.style.width   = 'calc(100vw - 10rem)';
-    frame.style.height  = 'calc((100vw - 10rem)*9/16)';
+    frame.scrolling         = "no";
+    frame.src               = "{{ mediamtx.hls }}/{{ camera.name }}";
+    frame.id                = 'dialog_{{ camera.name }}';
+    frame.style.display     = 'inline-block';
+    frame.style.width       = 'calc(100vw - 10rem)';
+    frame.style.maxWidth    = 'calc(150vh - 10rem)';
+    frame.style.aspectRatio = 16 / 9;
     wrapper.appendChild(frame);
 
     wrapper.style.background = '#0008';
@@ -27,5 +28,9 @@
     wrapper.style.left       = 0;
     wrapper.style.right      = 0;
     document.body.appendChild(wrapper);
+
+    wrapper.onclick = function(ev) {
+      document.body.removeChild(wrapper);
+    }
   }
 </script>
