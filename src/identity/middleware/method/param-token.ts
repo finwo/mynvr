@@ -5,7 +5,6 @@ import { AuthenticatedRequest } from '@identity/model/authenticated-request';
 import { ValidateAuthTokenQuery } from '@identity/query/validate-auth-token';
 
 export default async function(req: AuthenticatedRequest, res: FastifyReply, next: ()=>void) {
-  console.log('param-token called');
 
   // Skip if already authenticated
   if (req.auth) return next();
