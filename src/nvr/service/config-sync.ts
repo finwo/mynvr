@@ -52,54 +52,10 @@ export class ConfigSyncService {
         recordFormat          : 'fmp4',
         recordPath            : '/data/recordings/%path/%Y-%m-%d_%H-%M-%S-%f',
         recordSegmentDuration : '10m',
+        recordDeleteAfter     : '24h',
       }, config)),
     })).text();
 
-    console.log({ config, globalConfigResponse, pathDefaultsResponse });
-
-          // sourceOnDemand : false,
-          // record         : true,
-
-    // const cameras = await this.cameraRepository.find();
-    //
-    // const getPathsUrl = `${this.baseUrl}/v3/paths/list`;
-    // const response = await (await fetch(getPathsUrl)).json() as GetPathsResponse;
-    //
-    // // Build mutation lists
-    // const addList = cameras.filter(need => {
-    //   return !response.items.find(found => need.name == found.name);
-    // });
-    // const removeList = response.items.filter(found => {
-    //   return !cameras.find(need => need.name == found.name);
-    // });
-    //
-    // // Add new cameras
-    // for(const need of addList) {
-    //   const addPathUrl = `${this.baseUrl}/v3/config/paths/add/${need.name}`;
-    //   const addResponse = await fetch(addPathUrl, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       name           : need.name,
-    //       source         : need.source,
-    //       sourceOnDemand : false,
-    //       record         : true,
-    //       recordPath     : `${process.env.RECORDING_DIR}/%path/%Y-%m-%d_%H-%M-%S-%f`,
-    //     }),
-    //   });
-    // }
-    //
-    // // Remove old cameras
-    // for(const found of removeList) {
-    //   const removePathUrl = `${this.baseUrl}/v3/config/paths/delete/${found.name}`;
-    //   const removeResponse = await fetch(removePathUrl, {
-    //     method: 'DELETE',
-    //   });
-    // }
-    //
-    // // TODO: update existing
   }
 
 }
