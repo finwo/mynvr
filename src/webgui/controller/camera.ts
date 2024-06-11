@@ -6,6 +6,7 @@ import   requireAuthentication            from '@identity/middleware/require-aut
 
 import { Template } from '@webgui/template';
 import { CameraRepository } from '@nvr/repository/camera';
+import { RecordingExportQuery } from '@nvr/query/recording-export';
 
 const commonData = {
   site: {
@@ -18,6 +19,7 @@ export class CameraController {
   constructor(
     private template: Template,
     private cameraRepository: CameraRepository,
+    private recordingExportQuery: RecordingExportQuery,
   ) {}
 
   @Get()
@@ -46,6 +48,20 @@ export class CameraController {
         webrtc: process.env.MEDIAMTX_WEBRTC,
       },
     }));
+  }
+
+  @Get('/:name/export')
+  @Middleware(authenticated)
+  @Middleware(requireAuthentication())
+  async cameraExport(
+    @Req() req: AuthenticatedRequest,
+    @Res() res: FastifyReply
+  ) {
+    if (!req.auth) throw new Error();
+    const cameraName = (req.params as Record<string, string>).name;
+    // const range      =
+
+    return res.send('dinges');
   }
 
   @Delete('/:name')

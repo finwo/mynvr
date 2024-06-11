@@ -10,10 +10,16 @@
 {% include "form/camera-details.html" %}
 
 <script>
+  function parentForm(el) {
+    if (el === document.body) return false;
+    if (el.tagName.toLowerCase() == 'form') return el;
+    return parentForm(el.parentElement);
+  }
+
   (() => {
-    const frm = [...document.querySelectorAll('form')].pop();
+    const btn = detailSubmit;
+    const frm = parentForm(btn);
     frm.setAttribute('hx-post', frm.getAttribute('hx-post') + '?camera={{ camera.name }}');
-    const btn = [...document.querySelectorAll('form button')].pop();
     if (!btn) return;
     const deleteButton = document.createElement('button');
     deleteButton.setAttribute('hx-delete' , '/ui/cameras/{{ camera.name }}');
@@ -27,22 +33,55 @@
 </script>
 
 {% if recordingRange %}
-<div>
+<form onsubmit="return handleExport();">
   <h3>Export</h3>
 
   <input id="datepicker"/>
   <script>
     (async () => {
       while(!window.flatpickr) await new Promise(r => setTimeout(r,100));
-      flatpickr(document.getElementById('datepicker'), {
+      const picker = flatpickr(datepicker, {
         dateFormat: "Y-m-d",
         mode: 'range',
         minDate: "{{ recordingRange.first }}".split('T').shift(),
         maxDate: "{{ recordingRange.last  }}".split('T').shift(),
       });
+      datepicker.f = picker;
     })();
   </script>
 
-  <button>Download</button>
-</div>
+  <button type="submit">Download</button>
+
+  <div id="exportError" style="color:var(--col-danger);"></div>
+
+  <script>
+    parentForm(datepicker).onsubmit = function(e) {
+      e.preventDefault();
+      exportError.innerText = '';
+
+      if (datepicker.f.selectedDates.length != 2) {
+        exportError.innerText = 'No date range selected';
+        return;
+      }
+
+      const q = {
+        auth: JSON.parse(localStorage.authToken || sessionStorage.authToken),
+        start: '' +
+          datepicker.f.selectedDates[0].getFullYear() + '-' +
+          ('00'+(datepicker.f.selectedDates[0].getMonth()+1)).slice(-2) + '-' +
+          ('00'+datepicker.f.selectedDates[0].getDate()).slice(-2),
+        end: '' +
+          datepicker.f.selectedDates[1].getFullYear() + '-' +
+          ('00'+(datepicker.f.selectedDates[1].getMonth()+1)).slice(-2) + '-' +
+          ('00'+datepicker.f.selectedDates[1].getDate()).slice(-2),
+      };
+      const query = qs.encode(q);
+
+      const anchor = document.createElement('a');
+      anchor.setAttribute('href', `/ui/cameras/{{ camera.name }}/export?${query}`);
+      anchor.setAttribute('download', `export_{{ camera.name }}_${q.start}_${q.end}.mp4`);
+      anchor.click();
+    }
+  </script>
+</form>
 {% endif %}
