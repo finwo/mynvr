@@ -1,6 +1,7 @@
-import { Controller, Get, Res } from '@finwo/router';
-import { FastifyReply         } from 'fastify';
-import { Template             } from '@webgui/template';
+import { Controller, Get, Req, Res    } from '@finwo/router';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { Template                     } from '@webgui/template';
+import { existsSync                   } from 'fs';
 
 const commonData = {
   site: {
@@ -14,25 +15,22 @@ export class PageController {
     private template: Template,
   ) {}
 
-  @Get('/users')
+  @Get('/:name')
   async usersPage(
-    @Res() res: FastifyReply
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
   ) {
+    let page = (req.params as Record<string, string>).name;
+    const filename = __dirname+`/../template/page/${page}.html`;
+    if (!existsSync(filename)) {
+      console.log({ filename });
+      res.statusCode = 404;
+      page = '404';
+    }
     res.header('Content-Type', 'text/html');
-    res.send(this.template.render('page/users.html', {
+    res.send(this.template.render(`page/${page}.html`, {
       ...commonData,
     }));
   }
-
-  @Get('/account')
-  async accountPage(
-    @Res() res: FastifyReply
-  ) {
-    res.header('Content-Type', 'text/html');
-    res.send(this.template.render('page/account.html', {
-      ...commonData,
-    }));
-  }
-
 
 }

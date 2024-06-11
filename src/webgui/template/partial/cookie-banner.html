@@ -26,7 +26,7 @@
 <div id=cookiewrapper>
   <div id=cookiebanner>
     We make use of technical cookies.
-    <a href="/ui/use-of-cookies">Read more about it here</a>
+    <a href="/ui/cookies">Read more about it here</a>
     <button onclick="acceptCookies();">Accept</button>
   </div>
 </div>
@@ -36,7 +36,7 @@
     delete localStorage.cookieConsent;
   }
   // Handle already-accepted
-  if ((parseInt(localStorage.cookieConsent)|0) || (document.location.pathname == "/ui/use-of-cookies")) {
+  if ((parseInt(localStorage.cookieConsent)|0) || (document.location.pathname == "/ui/cookies")) {
     document.body.removeChild(cookiewrapper);
   }
   // Accept action

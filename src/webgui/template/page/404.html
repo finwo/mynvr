@@ -1,0 +1,36 @@
+{% extends "layout/base.html" %}
+
+{% block title %}404{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    margin: 0 auto;
+    width: 60rem;
+    max-width: 100%;
+    padding: 2em;
+  }
+  h2 {
+    margin-top: 2rem;
+  }
+  p {
+    margin-top: 1em;
+  }
+</style>
+
+<div id=wrapper>
+  <a href="/">Home</a>
+
+  <h2>Page not found</h2>
+
+  <p>
+    <img
+      src="/ui/assets/hardhat.png"
+      style="float:left;height:10em;"
+    />
+    <span style="display:table-cell;height:10em;padding-left:1em;vertical-align:middle;">Our penguins are still hard at work, so that might be it</span>
+  </p>
+
+
+</div>
+{% endblock %}
