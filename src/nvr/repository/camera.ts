@@ -15,5 +15,4 @@ export abstract class CameraRepository {
   abstract save(camera: Partial<Camera>): Promise<boolean>;
   abstract on(name: string, fn: Callback<Partial<Camera>>): void;
   abstract emit(name: string, subject: Partial<Camera>): Promise<void>;
-
 };

@@ -9,6 +9,7 @@ import   requireAuthentication                         from '@identity/middlewar
 import { CameraRepository                            } from '@nvr/repository/camera';
 import { isCamera, Camera                            } from '@nvr/model/camera';
 import { AuthenticatedRequest                        } from '@identity/model/authenticated-request';
+import { RecordingRangeQuery                         } from '@nvr/query/recording-range';
 
 const assetDir = resolve(__dirname, '../../../assets');
 
@@ -16,7 +17,7 @@ const assetDir = resolve(__dirname, '../../../assets');
 export class FormController {
   constructor(
     private template: Template,
-    private cameraRepository: CameraRepository
+    private cameraRepository: CameraRepository,
   ) {}
 
   @Get("/camera-details.html")

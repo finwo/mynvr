@@ -25,3 +25,24 @@
     htmx.process(frm);
   })();
 </script>
+
+{% if recordingRange %}
+<div>
+  <h3>Export</h3>
+
+  <input id="datepicker"/>
+  <script>
+    (async () => {
+      while(!window.flatpickr) await new Promise(r => setTimeout(r,100));
+      flatpickr(document.getElementById('datepicker'), {
+        dateFormat: "Y-m-d",
+        mode: 'range',
+        minDate: "{{ recordingRange.first }}".split('T').shift(),
+        maxDate: "{{ recordingRange.last  }}".split('T').shift(),
+      });
+    })();
+  </script>
+
+  <button>Download</button>
+</div>
+{% endif %}

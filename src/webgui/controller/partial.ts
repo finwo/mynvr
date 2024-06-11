@@ -9,6 +9,7 @@ import   authenticated                           from '@identity/middleware/auth
 import   requireAuthentication                   from '@identity/middleware/require-authentication';
 import { Template                              } from '@webgui/template';
 import { CameraRepository                      } from '@nvr/repository/camera';
+import { RecordingRangeQuery                   } from '@nvr/query/recording-range';
 
 const partialDir = resolve(__dirname, '../template/partial');
 const commonData = {
@@ -21,7 +22,8 @@ const commonData = {
 export class PartialController {
   constructor(
     private template: Template,
-    private cameraRepository: CameraRepository
+    private cameraRepository: CameraRepository,
+    private recordingRangeQuery: RecordingRangeQuery,
   ) {}
 
   @Get("/:name")
@@ -101,12 +103,19 @@ export class PartialController {
     @Res() res: FastifyReply
   ) {
     if (!req.auth) throw new Error();
+
+    const camera = await this.cameraRepository.get((req.params as Record<string, string>).name);
+    const data   = { ...commonData, user: req.auth.user, camera, recordingRange: false } as Record<string, any>;
+
+    if (camera) {
+      const rangeResponse = await this.recordingRangeQuery.execute(camera.name);
+      if (rangeResponse.ok) {
+        data.recordingRange = rangeResponse.range;
+      }
+    }
+
     res.header('Content-Type', 'text/html');
-    res.send(this.template.render('partial/camera-details.html', {
-      ...commonData,
-      user: req.auth.user,
-      camera: await this.cameraRepository.get((req.params as Record<string, string>).name),
-    }));
+    res.send(this.template.render('partial/camera-details.html', data));
   }
 
 }

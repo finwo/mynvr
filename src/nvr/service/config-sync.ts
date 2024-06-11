@@ -52,7 +52,7 @@ export class ConfigSyncService {
         recordFormat          : 'fmp4',
         recordPath            : '/data/recordings/%path/%Y-%m-%d_%H-%M-%S-%f',
         recordSegmentDuration : '10m',
-        recordDeleteAfter     : '24h',
+        recordDeleteAfter     : '336h',
       }, config)),
     })).text();
 

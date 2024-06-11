@@ -18,6 +18,23 @@ export class AssetController {
     res.send(content);
   }
 
+  @Get("/flatpickr.js")
+  async serveEasepickJs(
+    @Res() res: FastifyReply
+  ) {
+    res.header('Content-Type', 'application/javascript');
+    const content = readFileSync(resolve(__dirname, '../../../node_modules/flatpickr/dist/flatpickr.js'));
+    res.send(content);
+  }
+  @Get("/flatpickr.css")
+  async serveEasepickCss(
+    @Res() res: FastifyReply
+  ) {
+    res.header('Content-Type', 'text/css');
+    const content = readFileSync(resolve(__dirname, '../../../node_modules/flatpickr/dist/flatpickr.css'));
+    res.send(content);
+  }
+
   @Get("/:filename")
   async serveAuthenticationBackground(
     @Req() req: FastifyRequest,
