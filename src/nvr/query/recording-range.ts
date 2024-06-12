@@ -42,7 +42,6 @@ export class RecordingRangeQuery {
       name: string,
       segments: { start: string }[],
     };
-    console.log({ rangeResponse });
     if ((!rangeResponse) || (!rangeResponse.name)) {
       return { ok: false, error: 'not-found' };
     }

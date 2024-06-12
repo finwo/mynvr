@@ -38,7 +38,7 @@ services:
       - 4000:4000
     environment:
       - PORT=4000
-      - RECORDING_DIR=/data/recordings        # As seen from mediamtx
+      - RECORDING_DIR=/data/recordings        # As seen from mediamtx & agent
       - MEDIAMTX_API=http://mediamtx:9997     # As seen from agent
       - MEDIAMTX_RTSP=rtsp://mediamtx:8554    # As seen from agent
       - MEDIAMTX_HLS=http://localhost:8888    # As seen from external

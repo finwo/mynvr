@@ -59,9 +59,29 @@ export class CameraController {
   ) {
     if (!req.auth) throw new Error();
     const cameraName = (req.params as Record<string, string>).name;
-    // const range      =
+    if (!cameraName) throw new Error();
 
-    return res.send('dinges');
+    const { start, end } = req.query as Record<string, string>;
+    if (!start) throw new Error();
+    if (!end) throw new Error();
+
+    const response = await this.recordingExportQuery.execute({
+      camera: cameraName,
+      range: {
+        start,
+        end,
+      },
+    });
+
+    if (response.ok) {
+      res.hijack();
+      res.raw.setHeader('Content-Type', 'video/mp4');
+      response.data.pipe(res.raw);
+      return;
+    }
+
+    res.statusCode = 500;
+    res.send(response.error);
   }
 
   @Delete('/:name')
