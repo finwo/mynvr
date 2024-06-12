@@ -27,7 +27,7 @@ services:
       - ./docker/mediamtx/config.yml:/mediamtx.yml
       - ./data:/data
   mynvr:
-    build: .
+    image: finwo/mynvr
     ports:
       - 4000:4000
     environment:
