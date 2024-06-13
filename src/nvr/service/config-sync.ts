@@ -35,8 +35,9 @@ export class ConfigSyncService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        rtsp: true,
-        api : true,
+        rtsp      : true,
+        api       : true,
+        hlsAddress: ':8088',
       }),
     })).text();
 
