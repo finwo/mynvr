@@ -84,9 +84,7 @@ export class CameraController {
     if (!req.auth) throw new Error();
     const cameraName = (req.params as Record<string, string>).name;
     if (!cameraName) throw new Error();
-
     await this.cameraRepository.delete(cameraName);
-
     const isHtmx = (req.headers['hx-request'] && req.headers['hx-request'] == 'true');
     if (isHtmx) {
       res.statusCode = 204;

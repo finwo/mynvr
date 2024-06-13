@@ -1,0 +1,34 @@
+<style>
+  #deleteButton {
+    background-color: var(--col-danger);
+  }
+  form {
+    flex-grow: 1;
+  }
+</style>
+
+{% include "form/user-details.html" %}
+
+{% if auth.user.id !== user.id %}
+  <button id="deleteButton" hx-delete="/ui/users/{{ user.id }}" hx-trigger="click" hx-confirm="Are you sure you want to delete {{ user.username }}?">
+    Delete
+  </button>
+{% endif %}
+
+<script>
+  function parentForm(el) {
+    if (el === document.body) return false;
+    if (el.tagName.toLowerCase() == 'form') return el;
+    return parentForm(el.parentElement);
+  }
+
+  (() => {
+    const btn = detailSubmit;
+    const frm = parentForm(btn);
+    frm.setAttribute('hx-post', frm.getAttribute('hx-post') + '?user={{ user.id }}');
+    if (!btn) return;
+    if (!deleteButton) return;
+    btn.parentElement.insertBefore(deleteButton, btn.nextSibling);
+    htmx.process(frm);
+  })();
+</script>

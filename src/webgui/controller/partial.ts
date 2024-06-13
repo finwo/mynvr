@@ -107,7 +107,6 @@ export class PartialController {
     if (!req.auth) throw new Error();
     res.header('Content-Type', 'text/html');
     const users = await this.userRepository.findAll();
-    console.log({ users });
     res.send(this.template.render('partial/user-overview.html', {
       ...commonData,
       user: req.auth.user,
@@ -127,19 +126,30 @@ export class PartialController {
     @Res() res: FastifyReply
   ) {
     if (!req.auth) throw new Error();
-
     const camera = await this.cameraRepository.get((req.params as Record<string, string>).name);
     const data   = { ...commonData, user: req.auth.user, camera, recordingRange: false } as Record<string, any>;
-
     if (camera) {
       const rangeResponse = await this.recordingRangeQuery.execute(camera.name);
       if (rangeResponse.ok) {
         data.recordingRange = rangeResponse.range;
       }
     }
-
     res.header('Content-Type', 'text/html');
     res.send(this.template.render('partial/camera-details.html', data));
+  }
+
+  @Get("/user-details/:id")
+  @Middleware(authenticated)
+  @Middleware(requireAuthentication())
+  async serveUserDetails(
+    @Req() req: AuthenticatedRequest,
+    @Res() res: FastifyReply
+  ) {
+    if (!req.auth) throw new Error();
+    const user = await this.userRepository.getById((req.params as Record<string, string>).id);
+    const data   = { ...commonData, auth: req.auth, user } as Record<string, any>;
+    res.header('Content-Type', 'text/html');
+    res.send(this.template.render('partial/user-details.html', data));
   }
 
 }

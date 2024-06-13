@@ -1,0 +1,38 @@
+<form
+  hx-post="/ui/form/user-details.html"
+>
+
+  {% if user %}
+    <input name="id" style="display:none;" value="{{ user.id }}"/>
+  {% endif %}
+
+  <div class="form-group">
+    <label for="user-username">Username</label>
+    <input id="user-username" type="text" name="username" {% if user %}value="{{ user.username }}"{% endif %}/>
+  </div>
+
+  <div class="form-group">
+    <label for="user-password">Password</label>
+    <input id="user-password" type="password" name="password"/>
+  </div>
+
+  <div class="form-group">
+    <label for="user-password-repeat">Repeat password</label>
+    <input id="user-password-repeat" type="password" name="passwordRepeat"/>
+  </div>
+
+  {% if error %}
+  <div style="color:red;">{{ error }}</div>
+  {% endif %}
+
+  {% if user %}
+    <button id="detailSubmit" type="submit">
+      Edit
+    </button>
+  {% else %}
+    <button id=detailSubmit type="submit">
+      Add
+    </button>
+  {% endif %}
+
+</form>

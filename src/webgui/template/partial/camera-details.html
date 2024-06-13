@@ -9,6 +9,10 @@
 
 {% include "form/camera-details.html" %}
 
+<button id="deleteButton" hx-delete="/ui/cameras/{{ camera.name }}" hx-trigger="click" hx-confirm="Are you sure you want to delete {{ camera.name }}?">
+  Delete
+</button>
+
 <script>
   function parentForm(el) {
     if (el === document.body) return false;
@@ -21,12 +25,6 @@
     const frm = parentForm(btn);
     frm.setAttribute('hx-post', frm.getAttribute('hx-post') + '?camera={{ camera.name }}');
     if (!btn) return;
-    const deleteButton = document.createElement('button');
-    deleteButton.setAttribute('hx-delete' , '/ui/cameras/{{ camera.name }}');
-    deleteButton.setAttribute('hx-trigger', 'click');
-    deleteButton.setAttribute('hx-confirm', 'Are you sure you want to delete {{ camera.name }}?');
-    deleteButton.style.backgroundColor = 'var(--col-danger)';
-    deleteButton.innerText = 'Delete';
     btn.parentElement.insertBefore(deleteButton, btn.nextSibling);
     htmx.process(frm);
   })();

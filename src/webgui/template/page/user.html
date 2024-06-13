@@ -1,0 +1,42 @@
+{% extends "layout/webmin.html" %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+{{ super() }}
+
+<style>
+</style>
+
+<style>
+  #user-preview {
+    display: inline-block;
+    width: 15rem;
+  }
+  #user-details {
+    display: inline-block;
+  }
+  #wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #wrapper > * {
+    margin: 1rem;
+  }
+</style>
+
+<main>
+  <h2>User</h2>
+
+  <div id="wrapper">
+    <div
+      id="user-details"
+      hx-trigger="load"
+      hx-get="/ui/partial/user-details/{{ user.id }}"
+      hx-target="#user-details"
+      hx-swap="outerHTML"
+    >Loading...</div>
+  </div>
+</main>
+
+{% endblock %}

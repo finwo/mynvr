@@ -52,6 +52,11 @@ export class IdentityCredentialJsonRepository extends CredentialRepository {
     if (!credential.id) credential.id = uuidv4();
     const contents = this.getContents().filter(entry => {
       if (!isCredential(entry)) return false;
+      if (
+        (credential.type == 'password') &&
+        (entry.type == 'password') &&
+        (credential.userId == entry.userId)
+      ) { return false; }
       return entry.id !== credential.id;
     });
     contents.push(credential);
