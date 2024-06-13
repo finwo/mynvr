@@ -22,16 +22,6 @@ export class CameraController {
     private recordingExportQuery: RecordingExportQuery,
   ) {}
 
-  @Get()
-  async camerasPage(
-    @Res() res: FastifyReply
-  ) {
-    res.header('Content-Type', 'text/html');
-    res.send(this.template.render('page/dashboard.html', {
-      ...commonData,
-    }));
-  }
-
   @Get('/:name')
   async cameraPage(
     @Req() req: FastifyRequest,

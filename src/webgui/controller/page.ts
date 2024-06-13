@@ -16,7 +16,7 @@ export class PageController {
   ) {}
 
   @Get('/:name')
-  async usersPage(
+  async dynamicPage(
     @Req() req: FastifyRequest,
     @Res() res: FastifyReply,
   ) {
