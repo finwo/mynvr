@@ -8,6 +8,7 @@ import { AuthenticatedRequest                  } from '@identity/model/authentic
 import   authenticated                           from '@identity/middleware/authenticated';
 import   requireAuthentication                   from '@identity/middleware/require-authentication';
 import { Template                              } from '@webgui/template';
+import { UserRepository                        } from '@identity/repository/user';
 import { CameraRepository                      } from '@nvr/repository/camera';
 import { RecordingRangeQuery                   } from '@nvr/query/recording-range';
 
@@ -22,6 +23,7 @@ const commonData = {
 export class PartialController {
   constructor(
     private template: Template,
+    private userRepository: UserRepository,
     private cameraRepository: CameraRepository,
     private recordingRangeQuery: RecordingRangeQuery,
   ) {}
@@ -88,6 +90,28 @@ export class PartialController {
       ...commonData,
       user: req.auth.user,
       cameras: await this.cameraRepository.find(),
+      mediamtx: {
+        hls   : process.env.MEDIAMTX_HLS,
+        webrtc: process.env.MEDIAMTX_WEBRTC,
+      },
+    }));
+  }
+
+  @Get("/user-overview.html")
+  @Middleware(authenticated)
+  @Middleware(requireAuthentication())
+  async serveUserOverview(
+    @Req() req: AuthenticatedRequest,
+    @Res() res: FastifyReply
+  ) {
+    if (!req.auth) throw new Error();
+    res.header('Content-Type', 'text/html');
+    const users = await this.userRepository.findAll();
+    console.log({ users });
+    res.send(this.template.render('partial/user-overview.html', {
+      ...commonData,
+      user: req.auth.user,
+      users: await this.userRepository.findAll(),
       mediamtx: {
         hls   : process.env.MEDIAMTX_HLS,
         webrtc: process.env.MEDIAMTX_WEBRTC,

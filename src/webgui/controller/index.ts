@@ -24,4 +24,5 @@ export const controllers = [
   require('./partial').PartialController,
   require('./page').PageController,
   require('./snapshot').SnapshotController,
+  require('./user').UserController,
 ];

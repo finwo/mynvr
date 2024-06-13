@@ -1,0 +1,33 @@
+<style>
+  #addUserButton {
+    background-color: #282;
+  }
+  #user-list {
+    border-collapse: collapse;
+  }
+</style>
+
+<button
+  id="addUserButton"
+  hx-get="/ui/form/user-details.html"
+  hx-trigger="click"
+  hx-target="#user-overview"
+  hx-swap="outerHTML"
+>
+  Add
+</button>
+
+<table id="user-list">
+  <thead>
+    <tr>
+      <th>Username</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+      <tr>
+        <td><a href="/ui/users/{{ user.id }}">{{ user.username }}</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
