@@ -14,12 +14,15 @@ import { ConfigRepository } from '@nvr/repository/config';
 @Service()
 export class ConfigSyncService {
   private baseUrl: string;
+  private recordingsDir: string;
 
   constructor(
     private configRepository: ConfigRepository
   ) {
     this.baseUrl = process.env.MEDIAMTX_API || '';
     if (!this.baseUrl) throw new Error('Missing MEDIAMTX_API env var');
+    this.recordingsDir = process.env.RECORDING_DIR || '';
+    if (!this.recordingsDir) throw new Error('Missing RECORDING_DIR env var');
 
     this.configRepository.on('post-put', () => this.refreshConfig());
     this.refreshConfig();
@@ -51,7 +54,7 @@ export class ConfigSyncService {
         sourceOnDemand        : false,
         record                : true,
         recordFormat          : 'fmp4',
-        recordPath            : '/data/recordings/%path/%Y-%m-%d_%H-%M-%S-%f',
+        recordPath            : `${this.recordingsDir}/%path/%Y-%m-%d_%H-%M-%S-%f`,
         recordSegmentDuration : '10m',
         recordDeleteAfter     : '336h',
       }, config)),
